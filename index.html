@@ -279,7 +279,7 @@ section{padding:56px 24px}
 #cum-aplici{background:var(--white)}
 
 /* 3-step apply process (#cum-aplici, APPLY-01) */
-.steps{display:flex;flex-direction:column;gap:24px;margin-top:32px}
+.steps{display:flex;flex-direction:column;gap:24px;margin-top:32px;list-style:none;padding-left:0}
 .step{background:var(--off-white);border:1px solid rgba(79,35,95,0.08);border-radius:var(--radius);padding:24px;position:relative}
 .step-badge{
   width:44px;height:44px;border-radius:50%;background:var(--purple);
@@ -288,7 +288,11 @@ section{padding:56px 24px}
 }
 .step-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:var(--purple);text-transform:uppercase;line-height:1.15;margin-bottom:8px}
 .step-body{font-size:15px;font-weight:300;color:var(--text-mid);line-height:1.55}
-.step-arrow{display:none}
+.step-arrow{
+  display:flex;align-items:center;justify-content:center;
+  position:absolute;left:0;right:0;bottom:-24px;height:24px;z-index:2;
+  pointer-events:none;
+}
 .step:last-child{border:1.5px solid rgba(228,0,114,0.3);background:rgba(228,0,114,0.05)}
 .step:last-child .step-badge{background:var(--magenta)}
 .step-tag{margin-bottom:8px;color:var(--magenta)} /* reuses .section-eyebrow role, no new type token */
@@ -297,8 +301,7 @@ section{padding:56px 24px}
   .step{flex:1}
   .step:not(:last-child) .step-arrow{
     display:flex;align-items:center;justify-content:center;
-    position:absolute;right:-24px;top:0;bottom:0;z-index:1;
-    font-size:24px;color:var(--text-light);
+    position:absolute;right:-24px;left:auto;top:0;bottom:0;height:auto;z-index:2;
   }
 }
 
@@ -435,6 +438,103 @@ footer{background:var(--purple-dark);padding:40px 24px;text-align:center}
   .nav-links{display:flex}
   section{padding:80px 24px}
 }
+
+/* ============================================================
+   MOTION PACKAGE — reveal engine, count-up, floating hero, shake
+   dots, scarcity-bar fill, chevron step connectors, scroll-spy +
+   progress bar. Vanilla, GPU-friendly (transform/opacity/clip-path),
+   reduced-motion handled in the block below. No new brand colors.
+   ============================================================ */
+:root{--ease-motion:cubic-bezier(.2,.7,.2,1)}
+
+/* top scroll-progress bar */
+.progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:200;
+  background:linear-gradient(90deg,var(--magenta),var(--gold));
+  transition:width .08s linear;pointer-events:none}
+
+/* nav scroll-spy active state (keeps existing navbar look) */
+.nav-link.active{color:var(--white);background:var(--magenta)}
+.nav-link.active:hover{color:var(--white);background:var(--magenta)}
+
+/* scroll-reveal engine */
+[data-reveal]{opacity:0;transform:translateY(24px);
+  transition:opacity .7s var(--ease-motion),transform .7s var(--ease-motion)}
+[data-reveal].in{opacity:1;transform:none}
+[data-stagger]>*{opacity:0;transform:translateY(24px);
+  transition:opacity .6s var(--ease-motion),transform .6s var(--ease-motion)}
+[data-stagger].in>*{opacity:1;transform:none}
+[data-stagger].in>*:nth-child(1){transition-delay:0s}
+[data-stagger].in>*:nth-child(2){transition-delay:.08s}
+[data-stagger].in>*:nth-child(3){transition-delay:.16s}
+[data-stagger].in>*:nth-child(4){transition-delay:.24s}
+[data-stagger].in>*:nth-child(5){transition-delay:.32s}
+[data-stagger].in>*:nth-child(6){transition-delay:.40s}
+[data-stagger].in>*:nth-child(7){transition-delay:.48s}
+[data-stagger].in>*:nth-child(8){transition-delay:.56s}
+[data-stagger].in>*:nth-child(9){transition-delay:.64s}
+
+/* hero: float the decorative circles + extra orbs/dots */
+.hero::before{animation:floatA 16s ease-in-out infinite;will-change:transform}
+.hero::after{animation:floatB 19s ease-in-out infinite;will-change:transform}
+@keyframes floatA{0%,100%{transform:translate(0,0)}50%{transform:translate(-22px,26px)}}
+@keyframes floatB{0%,100%{transform:translate(0,0)}50%{transform:translate(26px,-20px)}}
+@keyframes floatC{0%,100%{transform:translate(0,0)}50%{transform:translate(18px,22px)}}
+@keyframes floatD{0%,100%{transform:translate(0,0)}50%{transform:translate(-16px,-22px)}}
+.hero-orb,.hero-dot{position:absolute;border-radius:50%;pointer-events:none;
+  will-change:transform;z-index:0}
+.hero-orb--blue{top:38%;right:8%;width:min(20vw,150px);aspect-ratio:1;
+  background:var(--blue);opacity:.12;animation:floatC 13s ease-in-out infinite}
+.hero-orb--gold{top:12%;left:-40px;width:min(24vw,190px);aspect-ratio:1;
+  background:var(--gold);opacity:.10;animation:floatD 17s ease-in-out infinite}
+.hero-orb--magenta{bottom:8%;right:20%;width:min(30vw,240px);aspect-ratio:1;
+  background:var(--magenta);opacity:.09;animation:floatB 22s ease-in-out infinite}
+.hero-dot--1{top:24%;left:44%;width:14px;height:14px;background:var(--gold);
+  opacity:.5;animation:floatA 9s ease-in-out infinite}
+.hero-dot--2{top:64%;left:14%;width:12px;height:12px;background:var(--blue);
+  opacity:.45;animation:floatC 8s ease-in-out infinite}
+.hero-dot--3{top:30%;right:30%;width:10px;height:10px;background:var(--magenta);
+  opacity:.5;animation:floatD 7s ease-in-out infinite}
+
+/* hero scroll indicator */
+.hero-scroll{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);
+  z-index:2;color:rgba(255,255,255,.6);font-family:'Barlow',sans-serif;
+  font-size:11px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;
+  text-align:center;pointer-events:none}
+.hero-scroll svg{display:block;margin:6px auto 0;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(6px);opacity:1}}
+
+/* shake the skill dots on card hover */
+.skill-card:hover .skill-accent{animation:shake .5s var(--ease-motion)}
+@keyframes shake{0%,100%{transform:translate(0,0) rotate(0)}
+  15%{transform:translate(-3px,0) rotate(-9deg)}
+  30%{transform:translate(3px,0) rotate(9deg)}
+  45%{transform:translate(-2px,0) rotate(-6deg)}
+  60%{transform:translate(2px,0) rotate(6deg)}
+  78%{transform:translate(-1px,0) rotate(-3deg)}}
+
+/* scarcity bar fill (clip-path wipe keeps numbers/labels crisp) */
+.locuri-bar-a,.locuri-bar-b{clip-path:inset(0 100% 0 0);
+  transition:clip-path 1s var(--ease-motion)}
+.locuri-bar-b{transition-delay:.35s}
+.locuri-bar.in .locuri-bar-a,.locuri-bar.in .locuri-bar-b{clip-path:inset(0 0 0 0)}
+.locuri-bar.in .locuri-bar-b{animation:barpulse 2.4s ease-in-out 1.8s infinite}
+@keyframes barpulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.14)}}
+
+/* step connectors: chevron-trio draw on reveal */
+.step-arrow svg path{stroke-dasharray:30;stroke-dashoffset:30;opacity:0;
+  transition:stroke-dashoffset .4s var(--ease-motion),opacity .4s var(--ease-motion)}
+.steps.in .step-arrow svg .c1{stroke-dashoffset:0;opacity:.5;transition-delay:.30s}
+.steps.in .step-arrow svg .c2{stroke-dashoffset:0;opacity:.75;transition-delay:.42s}
+.steps.in .step-arrow svg .c3{stroke-dashoffset:0;opacity:1;transition-delay:.54s}
+.steps.in .step:nth-child(2) .step-arrow svg .c1{transition-delay:.52s}
+.steps.in .step:nth-child(2) .step-arrow svg .c2{transition-delay:.64s}
+.steps.in .step:nth-child(2) .step-arrow svg .c3{transition-delay:.76s}
+/* mobile: chevrons point down; desktop override sits in the media block below */
+.step-arrow svg{width:34px;height:auto;overflow:visible;transform:rotate(90deg)}
+@media(min-width:768px){
+  .step:not(:last-child) .step-arrow svg{transform:none;width:32px}
+}
+
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{
@@ -443,10 +543,23 @@ footer{background:var(--purple-dark);padding:40px 24px;text-align:center}
     transition-duration:0.01ms !important;
     scroll-behavior:auto !important;
   }
+  /* motion package: show final states, kill infinite loops */
+  [data-reveal],[data-stagger]>*{opacity:1 !important;transform:none !important}
+  .locuri-bar-a,.locuri-bar-b{clip-path:none !important;transform:none !important;animation:none !important}
+  .step-arrow svg path{stroke-dashoffset:0 !important;opacity:1 !important}
+  .hero::before,.hero::after,.hero-orb,.hero-dot,.hero-scroll svg{animation:none !important;transform:none !important}
+  .progress{transition:none !important}
 }
 </style>
+<noscript><style>
+  /* JS disabled: never hide content behind the reveal engine */
+  [data-reveal],[data-stagger]>*{opacity:1 !important;transform:none !important}
+  .locuri-bar-a,.locuri-bar-b{clip-path:none !important}
+  .step-arrow svg path{stroke-dashoffset:0 !important;opacity:1 !important}
+</style></noscript>
 </head>
 <body>
+<div class="progress" id="progress" aria-hidden="true"></div>
 
 <nav class="nav">
   <span class="nav-brand-youni">YOUNI</span>
@@ -464,39 +577,48 @@ footer{background:var(--purple-dark);padding:40px 24px;text-align:center}
 </nav>
 
 <section id="hero" class="hero">
-  <div class="section-inner">
+  <div class="hero-orb hero-orb--blue" aria-hidden="true"></div>
+  <div class="hero-orb hero-orb--gold" aria-hidden="true"></div>
+  <div class="hero-orb hero-orb--magenta" aria-hidden="true"></div>
+  <div class="hero-dot hero-dot--1" aria-hidden="true"></div>
+  <div class="hero-dot hero-dot--2" aria-hidden="true"></div>
+  <div class="hero-dot hero-dot--3" aria-hidden="true"></div>
+  <div class="section-inner" data-reveal>
     <p class="section-eyebrow">Youni își dă compania pe mâna a 20 de adolescenți</p>
     <h1 class="hero-title">THE CRAZIEST BET OF THE YEAR</h1>
     <p class="hero-sub">Timp de un an conduci o companie reală — nu o simulare — alături de echipa Youni Choice, spre un obiectiv de 1.000.000€. Business adevărat, mize adevărate. Unul dintre cei 20 poți fi tu.</p>
     <p class="hero-scarcity">Doar <span class="accent">5 locuri</span> deschise publicului larg</p>
     <a href="https://share-eu1.hsforms.com/1khC0m7n9T6i7xyvpMDoVzQ5jpsa" target="_blank" rel="noopener" class="cta" data-open-modal>Aplică Acum →</a>
   </div>
+  <div class="hero-scroll" aria-hidden="true">Derulează
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+  </div>
 </section>
 
 <section id="anvergura">
-  <div class="section-inner">
+  <div class="section-inner" data-reveal>
     <p class="section-eyebrow">Obiectivele pariului</p>
     <h2 class="section-title">Ce construim în 12 luni</h2>
     <p class="section-sub">Astea sunt obiectivele pe care le urmărim în acest pariu — ținta spre care muncim, cei 20 și echipa Youni, nu o promisiune fermă.</p>
-    <div class="stats-grid">
+    <div class="stats-grid" data-stagger>
       <div class="stat-card stat-card--primary">
-        <p class="stat-number stat-number--primary">1.000.000€</p>
+        <p class="stat-number stat-number--primary" data-count="1000000" data-dots="1" data-suffix="€">0</p>
         <p class="stat-label">Venituri — obiectivul pariului</p>
       </div>
       <div class="stat-card">
-        <p class="stat-number">24+</p>
+        <p class="stat-number" data-count="24" data-suffix="+">0</p>
         <p class="stat-label">Evenimente pentru elevi, pe toate domeniile</p>
       </div>
       <div class="stat-card">
-        <p class="stat-number">1000+</p>
+        <p class="stat-number" data-count="1000" data-suffix="+">0</p>
         <p class="stat-label">Elevi ajutați să treacă examene internaționale</p>
       </div>
       <div class="stat-card">
-        <p class="stat-number">5000+</p>
+        <p class="stat-number" data-count="5000" data-suffix="+">0</p>
         <p class="stat-label">Elevi orientați spre vocație și domeniu de studiu</p>
       </div>
       <div class="stat-card">
-        <p class="stat-number">5</p>
+        <p class="stat-number" data-count="5">0</p>
         <p class="stat-label">Studenți în nevoie, finanțați</p>
       </div>
     </div>
@@ -505,7 +627,7 @@ footer{background:var(--purple-dark);padding:40px 24px;text-align:center}
 </section>
 
 <section id="despre">
-  <div class="section-inner">
+  <div class="section-inner" data-reveal>
     <p class="section-eyebrow">Despre program</p>
     <h2 class="section-title">Ce fac, concret, cei 20</h2>
     <p class="section-sub">Un an în care conduci alături de echipă, nu doar observi.</p>
@@ -535,11 +657,11 @@ footer{background:var(--purple-dark);padding:40px 24px;text-align:center}
 </section>
 
 <section id="ce-inveti">
-  <div class="section-inner">
+  <div class="section-inner" data-reveal>
     <p class="section-eyebrow">Ce înveți</p>
     <h2 class="section-title">Ce înveți, concret</h2>
     <p class="section-sub">9 arii pe care le atingi direct, nu din carte — lucrând la un pariu real.</p>
-    <div class="skills-grid">
+    <div class="skills-grid" data-stagger>
       <div class="skill-card">
         <div class="skill-accent"></div>
         <h3 class="card-title">Sales</h3>
@@ -590,11 +712,11 @@ footer{background:var(--purple-dark);padding:40px 24px;text-align:center}
 </section>
 
 <section id="resurse">
-  <div class="section-inner">
+  <div class="section-inner" data-reveal>
     <p class="section-eyebrow">Ce pune Youni pe masă</p>
     <h2 class="section-title">Nu pleci de la zero</h2>
     <p class="section-sub">Youni pune pe masă tot ce ai nevoie ca să construiești de la prima zi.</p>
-    <div class="resource-grid">
+    <div class="resource-grid" data-stagger>
       <div class="resource-card">
         <h3 class="card-title">Sisteme &amp; procese</h3>
         <p class="card-body">Acces la sistemele și instrumentele cu care Youni Choice rulează deja o afacere reală.</p>
@@ -612,7 +734,7 @@ footer{background:var(--purple-dark);padding:40px 24px;text-align:center}
 </section>
 
 <section id="mentorat">
-  <div class="section-inner">
+  <div class="section-inner" data-reveal>
     <p class="section-eyebrow">Mentorat</p>
     <h2 class="section-title">Înveți alături de oameni care au construit deja ceva</h2>
     <p class="mentor-body">Nu ești lăsat singur cu o listă de sarcini. Ai acces continuu la mentorii Youni și la investitorii și advisorii din spatele acestui pariu — oameni care au construit deja companii reale și te ajută să iei deciziile corecte, nu doar pe cele sigure.</p>
@@ -627,22 +749,36 @@ footer{background:var(--purple-dark);padding:40px 24px;text-align:center}
 </section>
 
 <section id="cum-aplici">
-  <div class="section-inner">
+  <div class="section-inner" data-reveal>
     <p class="section-eyebrow">Cum aplici</p>
     <h2 class="section-title">3 pași. Fără birocrație.</h2>
     <p class="section-sub">Nu e un formular și-o rugăciune. E un proces scurt, direct, care ne arată cine ești.</p>
-    <ol class="steps">
+    <ol class="steps" data-stagger>
       <li class="step">
         <div class="step-badge">1</div>
         <h3 class="step-title">Trimiți CV-ul</h3>
         <p class="step-body">Ne spui cine ești și de ce vrei să faci parte din pariul ăsta.</p>
-        <span class="step-arrow" aria-hidden="true">→</span>
+        <span class="step-arrow" aria-hidden="true">
+          <svg viewBox="0 0 56 26" fill="none">
+            <defs><linearGradient id="stepcg1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e40072"/><stop offset="1" stop-color="#dda700"/></linearGradient></defs>
+            <path class="c1" d="M6 6 L15 13 L6 20" stroke="url(#stepcg1)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path class="c2" d="M20 6 L29 13 L20 20" stroke="url(#stepcg1)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path class="c3" d="M34 6 L43 13 L34 20" stroke="url(#stepcg1)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
       </li>
       <li class="step">
         <div class="step-badge">2</div>
-        <h3 class="step-title">Vii la interviu</h3>
+        <h3 class="step-title">Participi la interviu</h3>
         <p class="step-body">O discuție directă, față în față — vrem să te cunoaștem, nu să te testăm.</p>
-        <span class="step-arrow" aria-hidden="true">→</span>
+        <span class="step-arrow" aria-hidden="true">
+          <svg viewBox="0 0 56 26" fill="none">
+            <defs><linearGradient id="stepcg2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e40072"/><stop offset="1" stop-color="#dda700"/></linearGradient></defs>
+            <path class="c1" d="M6 6 L15 13 L6 20" stroke="url(#stepcg2)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path class="c2" d="M20 6 L29 13 L20 20" stroke="url(#stepcg2)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path class="c3" d="M34 6 L43 13 L34 20" stroke="url(#stepcg2)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
       </li>
       <li class="step">
         <p class="section-eyebrow step-tag">Partea distractivă</p>
@@ -656,11 +792,11 @@ footer{background:var(--purple-dark);padding:40px 24px;text-align:center}
 </section>
 
 <section id="locuri">
-  <div class="section-inner">
+  <div class="section-inner" data-reveal>
     <p class="section-eyebrow">Locuri / Scarcity</p>
     <h2 class="section-title">20 de locuri. Doar 5 sunt pentru oricine.</h2>
     <p class="section-sub">15 sunt rezervate elevilor Youni. Restul — 5 — sunt deschise publicului larg. Ăsta e locul tău.</p>
-    <p class="locuri-stat">20<span class="locuri-stat-label">locuri în total</span></p>
+    <p class="locuri-stat"><span data-count="20">0</span><span class="locuri-stat-label">locuri în total</span></p>
     <div class="locuri-bar" aria-hidden="true">
       <div class="locuri-bar-a">
         <span class="locuri-bar-num">15</span>
@@ -680,7 +816,7 @@ footer{background:var(--purple-dark);padding:40px 24px;text-align:center}
 </section>
 
 <section id="faq">
-  <div class="section-inner">
+  <div class="section-inner" data-reveal>
     <p class="section-eyebrow">FAQ</p>
     <h2 class="section-title">Întrebări pe care probabil ți le pui</h2>
     <div class="faq-list">
@@ -710,7 +846,7 @@ footer{background:var(--purple-dark);padding:40px 24px;text-align:center}
 </section>
 
 <section id="aplica" class="aplica-band">
-  <div class="section-inner">
+  <div class="section-inner" data-reveal>
     <p class="section-eyebrow">Ultima șansă</p>
     <h2 class="section-title">Ești unul dintre cei 5?</h2>
     <p class="section-sub">Peste un an, în timp ce colegii povestesc ce-au învățat la școală, tu ai condus o companie reală.</p>
@@ -720,7 +856,7 @@ footer{background:var(--purple-dark);padding:40px 24px;text-align:center}
 </section>
 
 <footer>
-  <div class="section-inner">
+  <div class="section-inner" data-reveal>
     <p class="footer-links">
       <a href="https://younichoice.com" target="_blank" rel="noopener">younichoice.com</a><span class="footer-sep">·</span><a href="https://www.younichoice.com/politica-de-confidentialitate" target="_blank" rel="noopener">Politică de confidențialitate</a><span class="footer-sep">·</span><a href="https://www.younichoice.com/termeni-si-conditii" target="_blank" rel="noopener">Termeni și condiții</a><span class="footer-sep">·</span><a href="https://www.instagram.com/younichoice/" target="_blank" rel="noopener">Instagram</a><span class="footer-sep">·</span><a href="https://www.tiktok.com/@younichoice1" target="_blank" rel="noopener">TikTok</a>
     </p>
@@ -869,6 +1005,96 @@ footer{background:var(--purple-dark);padding:40px 24px;text-align:center}
       openModal(el);
     });
   });
+})();
+
+/* ============================================================
+   MOTION PACKAGE — reveal engine, count-up, scroll-spy, progress
+   bar. Vanilla, self-contained, honors prefers-reduced-motion.
+   ============================================================ */
+(function () {
+  'use strict';
+  var rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- top scroll-progress bar ---- */
+  var pb = document.getElementById('progress');
+  if (pb) {
+    var onScroll = function () {
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      var p = max > 0 ? h.scrollTop / max : 0;
+      pb.style.width = (p * 100).toFixed(2) + '%';
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    onScroll();
+  }
+
+  /* ---- count-up (easeOutCubic, RO dot separators) ---- */
+  function fmt(n, dots) {
+    n = Math.round(n);
+    if (!dots) { return String(n); }
+    return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+  function countUp(el) {
+    if (el._counted) { return; }
+    el._counted = 1;
+    var target = +el.getAttribute('data-count');
+    var dots = el.getAttribute('data-dots');
+    var suf = el.getAttribute('data-suffix') || '';
+    if (rm || !isFinite(target)) { el.textContent = fmt(target, dots) + suf; return; }
+    var dur = 1400, t0 = performance.now();
+    (function tick(t) {
+      var k = Math.min(1, (t - t0) / dur);
+      var e = 1 - Math.pow(1 - k, 3);
+      el.textContent = fmt(target * e, dots) + suf;
+      if (k < 1) { requestAnimationFrame(tick); }
+    })(performance.now());
+  }
+
+  /* ---- reveal engine + count-up / bar triggers ---- */
+  function revealNow(el) {
+    el.classList.add('in');
+    if (el.querySelectorAll) {
+      var counts = el.querySelectorAll('[data-count]');
+      for (var i = 0; i < counts.length; i++) { countUp(counts[i]); }
+    }
+    if (el.matches && el.matches('[data-count]')) { countUp(el); }
+  }
+  var revealEls = document.querySelectorAll('[data-reveal],[data-stagger],.locuri-bar,[data-count]');
+  if (!('IntersectionObserver' in window)) {
+    for (var j = 0; j < revealEls.length; j++) { revealNow(revealEls[j]); }
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) { return; }
+        revealNow(en.target);
+        io.unobserve(en.target);
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
+    for (var k = 0; k < revealEls.length; k++) { io.observe(revealEls[k]); }
+  }
+
+  /* ---- nav scroll-spy ---- */
+  var links = Array.prototype.slice.call(document.querySelectorAll('.nav-link'));
+  if (links.length && 'IntersectionObserver' in window) {
+    var map = {};
+    links.forEach(function (a) {
+      var href = a.getAttribute('href') || '';
+      if (href.charAt(0) === '#') { map[href.slice(1)] = a; }
+    });
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) { return; }
+        var a = map[en.target.id];
+        if (!a) { return; }
+        links.forEach(function (l) { l.classList.remove('active'); });
+        a.classList.add('active');
+      });
+    }, { threshold: 0, rootMargin: '-45% 0px -50% 0px' });
+    document.querySelectorAll('section[id]').forEach(function (s) {
+      if (map[s.id]) { spy.observe(s); }
+    });
+  }
 })();
 </script>
 
