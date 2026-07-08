@@ -550,6 +550,73 @@ footer{background:var(--purple-dark);padding:40px 24px;text-align:center}
   .hero::before,.hero::after,.hero-orb,.hero-dot,.hero-scroll svg{animation:none !important;transform:none !important}
   .progress{transition:none !important}
 }
+
+/* ============================================================
+   MINI-GAME "Prinde cele 5 locuri" (#joc) — all selectors g5- scoped
+   to avoid collisions with site classes/ids. Reuses site brand tokens.
+   ============================================================ */
+.g5-cabinet{width:100%;max-width:460px;margin:28px auto 0;color:var(--white);
+  background:linear-gradient(180deg,#5a2a6b,var(--purple));
+  border:1px solid rgba(255,255,255,.12);border-radius:22px;overflow:hidden;
+  box-shadow:0 24px 70px rgba(0,0,0,.45);position:relative}
+
+/* header / HUD */
+.g5-top{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;
+  background:rgba(0,0,0,.18);border-bottom:1px solid rgba(255,255,255,.08)}
+.g5-brand{font-family:'Barlow Condensed',sans-serif;font-weight:900;letter-spacing:1px;text-transform:uppercase;font-size:17px}
+.g5-brand small{display:block;font-family:'Barlow',sans-serif;font-weight:400;letter-spacing:.5px;font-size:10px;color:var(--gold);text-transform:uppercase}
+.g5-caught{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;font-variant-numeric:tabular-nums}
+.g5-caught b{color:var(--magenta)} .g5-caught span{color:rgba(255,255,255,.5);font-size:15px}
+.g5-timewrap{height:5px;background:rgba(255,255,255,.12)}
+.g5-timebar{height:100%;width:100%;background:linear-gradient(90deg,var(--magenta),var(--gold));transition:width .1s linear}
+
+/* arena */
+.g5-arena{position:relative;height:400px;overflow:hidden;touch-action:manipulation;
+  background:radial-gradient(120% 90% at 50% 0%,rgba(228,0,114,.10),transparent 60%)}
+.g5-seat{position:absolute;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;
+  cursor:pointer;user-select:none;-webkit-user-select:none;transform:scale(0);
+  animation:g5-pop .13s cubic-bezier(.2,1.4,.4,1) forwards;touch-action:manipulation}
+@keyframes g5-pop{to{transform:scale(1)}}
+.g5-seat.g5-gone{animation:g5-fade .3s forwards} @keyframes g5-fade{to{transform:scale(.4);opacity:0}}
+.g5-seat.g5-intern{background:rgba(255,255,255,.09);border:1.5px solid rgba(255,255,255,.18)}
+.g5-seat.g5-intern::after{content:'';width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.35)}
+.g5-seat.g5-public{background:radial-gradient(circle at 35% 30%,#ff3d97,var(--magenta));
+  box-shadow:0 0 0 0 rgba(228,0,114,.55),0 8px 22px rgba(228,0,114,.5)}
+.g5-seat.g5-public::after{content:'★';color:#fff;font-size:24px;line-height:1}
+.g5-seat.g5-public .g5-ring{position:absolute;inset:-5px;border-radius:50%;border:3px solid rgba(255,255,255,.85);
+  animation:g5-ring linear forwards;pointer-events:none}
+@keyframes g5-ring{from{transform:scale(1);opacity:.9}to{transform:scale(1.35);opacity:0}}
+.g5-seat.g5-caught{animation:g5-catch .35s cubic-bezier(.2,1.5,.4,1) forwards}
+@keyframes g5-catch{40%{transform:scale(1.3)}to{transform:scale(0);opacity:0}}
+.g5-ghost{position:absolute;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:13px;color:rgba(255,255,255,.6);
+  text-transform:uppercase;pointer-events:none;animation:g5-ghost .8s ease-out forwards}
+@keyframes g5-ghost{to{transform:translateY(-26px);opacity:0}}
+.g5-plus{position:absolute;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:26px;color:var(--gold);
+  pointer-events:none;animation:g5-plusanim .7s ease-out forwards}
+@keyframes g5-plusanim{to{transform:translateY(-34px) scale(1.2);opacity:0}}
+
+/* overlays */
+.g5-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:30px 26px;background:rgba(58,24,71,.93);backdrop-filter:blur(4px);z-index:5;gap:14px}
+.g5-overlay.g5-hide{display:none}
+.g5-eyebrow{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold)}
+.g5-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;line-height:.95;font-size:clamp(30px,9vw,44px);text-wrap:balance;color:var(--white)}
+.g5-title em{font-style:normal;color:var(--magenta)}
+p.g5-lead{font-size:15px;font-weight:300;line-height:1.55;color:rgba(255,255,255,.8);max-width:330px}
+.g5-legend{display:flex;gap:18px;font-size:12px;color:rgba(255,255,255,.75);margin:2px 0 4px}
+.g5-legend i{display:inline-block;width:16px;height:16px;border-radius:50%;vertical-align:-3px;margin-right:6px}
+.g5-li-pub{background:var(--magenta)} .g5-li-int{background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.3)}
+.g5-btn{font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.6px;font-size:16px;
+  border:none;cursor:pointer;padding:15px 30px;border-radius:11px;background:var(--magenta);color:#fff;
+  text-decoration:none;display:inline-block;transition:background .2s,transform .1s;box-shadow:0 8px 26px rgba(228,0,114,.4)}
+.g5-btn:hover{background:var(--magenta-dark);transform:translateY(-2px)} .g5-btn:active{transform:translateY(0)}
+.g5-btn.g5-ghostbtn{background:transparent;border:1.5px solid rgba(255,255,255,.3);box-shadow:none;font-size:13px;padding:11px 20px}
+.g5-btn.g5-ghostbtn:hover{background:rgba(255,255,255,.08)}
+.g5-foot{text-align:center;font-size:11px;color:rgba(255,255,255,.4);padding:11px}
+/* the game's win/lose CTA reuses the site .cta but sits on the dark overlay */
+#g5-e-cta{margin-top:0}
+
+@media(prefers-reduced-motion:reduce){.g5-seat{animation-duration:.01s}}
 </style>
 <noscript><style>
   /* JS disabled: never hide content behind the reveal engine */
@@ -812,6 +879,45 @@ footer{background:var(--purple-dark);padding:40px 24px;text-align:center}
       <p>Nu există listă de așteptare — când cele 5 locuri publice se ocupă, aplicațiile pentru ele se închid.</p>
     </div>
     <a class="cta" data-open-modal href="https://share-eu1.hsforms.com/1khC0m7n9T6i7xyvpMDoVzQ5jpsa" target="_blank" rel="noopener" style="margin-top:24px">Prind unul din cele 5 →</a>
+  </div>
+</section>
+
+<section id="joc">
+  <div class="section-inner" data-reveal>
+    <p class="section-eyebrow">Mini-joc</p>
+    <h2 class="section-title">Prinde-ți locul</h2>
+    <p class="section-sub">Un mini-joc: prinde cele 5 locuri publice printre cele 15 interne, înainte să se ocupe. Apoi prinde-l pe bune.</p>
+
+    <div class="g5-cabinet">
+      <div class="g5-top">
+        <div class="g5-brand">Youni<small>The Craziest Bet</small></div>
+        <div class="g5-caught" id="g5-hud"><b id="g5-cn">0</b><span>/5 locuri</span></div>
+      </div>
+      <div class="g5-timewrap"><div class="g5-timebar" id="g5-tb"></div></div>
+
+      <div class="g5-arena" id="g5-arena">
+        <!-- INTRO -->
+        <div class="g5-overlay" id="g5-intro">
+          <p class="g5-eyebrow">Mini-joc</p>
+          <div class="g5-title">Prinde-ți <em>locul</em></div>
+          <p class="g5-lead">20 de locuri se deschid. 15 sunt luate de elevii Youni. Doar <b style="color:#fff">5 sunt publice</b> — și dispar cât ai clipi.</p>
+          <div class="g5-legend">
+            <span><i class="g5-li-pub"></i>Public — prinde-l!</span>
+            <span><i class="g5-li-int"></i>Intern — ignoră-l</span>
+          </div>
+          <button class="g5-btn" id="g5-start">Începe →</button>
+        </div>
+        <!-- END -->
+        <div class="g5-overlay g5-hide" id="g5-end">
+          <p class="g5-eyebrow" id="g5-e-eye">Rezultat</p>
+          <div class="g5-title" id="g5-e-title">—</div>
+          <p class="g5-lead" id="g5-e-lead">—</p>
+          <a class="cta" id="g5-e-cta" data-open-modal href="https://share-eu1.hsforms.com/1khC0m7n9T6i7xyvpMDoVzQ5jpsa" target="_blank" rel="noopener">Aplică Acum →</a>
+          <button class="g5-btn g5-ghostbtn" id="g5-retry">Mai încearcă</button>
+        </div>
+      </div>
+      <div class="g5-foot">Mini-joc · datele nu se salvează · butonul „Aplică" duce la formularul real</div>
+    </div>
   </div>
 </section>
 
@@ -1095,6 +1201,113 @@ footer{background:var(--purple-dark);padding:40px 24px;text-align:center}
       if (map[s.id]) { spy.observe(s); }
     });
   }
+})();
+</script>
+
+<!-- MINI-GAME "Prinde cele 5 locuri" (#joc) — isolated IIFE, g5- scoped.
+     Does not touch site globals or the modal; the #g5-e-cta CTA opens the
+     HubSpot modal via the site's existing delegated [data-open-modal] handler. -->
+<script>
+(function(){
+  var arena=document.getElementById('g5-arena'), intro=document.getElementById('g5-intro'),
+      end=document.getElementById('g5-end'), cn=document.getElementById('g5-cn'), tb=document.getElementById('g5-tb');
+  if(!arena) return;
+  var GOAL=5, ROUND=20000; // ms
+  var caught=0, running=false, t0=0, magT, greyT, rafId, seats=[];
+
+  function rnd(a,b){return a+Math.random()*(b-a)}
+  function pos(size){
+    var w=arena.clientWidth, h=arena.clientHeight, pad=8;
+    return {x:rnd(pad,w-size-pad), y:rnd(pad,h-size-pad)};
+  }
+  function label(cls,txt,x,y){
+    var g=document.createElement('div'); g.className=cls; g.textContent=txt;
+    g.style.left=x+'px'; g.style.top=y+'px'; arena.appendChild(g);
+    setTimeout(function(){g.remove()},800);
+  }
+  function spawn(isPublic){
+    if(!running) return;
+    var el=document.createElement('div'); el.className='g5-seat '+(isPublic?'g5-public':'g5-intern');
+    var p=pos(52); el.style.left=p.x+'px'; el.style.top=p.y+'px';
+    var life=isPublic?780:700;
+    if(isPublic){
+      var ring=document.createElement('span'); ring.className='g5-ring';
+      ring.style.animationDuration=life+'ms'; el.appendChild(ring);
+    }
+    var dead=false;
+    var kill=setTimeout(function(){
+      if(dead) return; dead=true;
+      if(isPublic){ el.classList.add('g5-gone'); label('g5-ghost','Ocupat',p.x+6,p.y+18); }
+      else el.classList.add('g5-gone');
+      setTimeout(function(){el.remove()},300);
+    },life);
+    el.addEventListener('pointerdown',function(ev){
+      ev.preventDefault();
+      if(dead) return;
+      if(isPublic){
+        dead=true; clearTimeout(kill); el.classList.add('g5-caught');
+        setTimeout(function(){el.remove()},350);
+        caught++; cn.textContent=caught;
+        label('g5-plus','+1',p.x+16,p.y+6);
+        if(caught>=GOAL) finish(true);
+      } else {
+        // tapped an internal seat — costs time (difficulty)
+        el.animate([{transform:'translateX(-5px)'},{transform:'translateX(5px)'},{transform:'translateX(0)'}],{duration:170});
+        t0-=1000; label('g5-ghost','−1s · intern',p.x-6,p.y+18);
+      }
+    });
+    arena.appendChild(el); seats.push(el);
+    if(seats.length>11){ var old=seats.shift(); if(old&&old.parentNode) old.remove(); }
+  }
+  function loop(){
+    if(!running) return;
+    var el=Date.now()-t0, left=Math.max(0,ROUND-el);
+    tb.style.width=(left/ROUND*100)+'%';
+    if(left<=0){ finish(false); return; }
+    rafId=requestAnimationFrame(loop);
+  }
+  function start(){
+    caught=0; cn.textContent='0'; running=true; t0=Date.now();
+    intro.classList.add('g5-hide'); end.classList.add('g5-hide');
+    tb.style.width='100%';
+    magT=setInterval(function(){spawn(true)},880);
+    greyT=setInterval(function(){spawn(false)},360);
+    spawn(true); setTimeout(function(){spawn(true)},300);
+    loop();
+  }
+  function clearAll(){
+    running=false; clearInterval(magT); clearInterval(greyT); cancelAnimationFrame(rafId);
+    seats.forEach(function(s){if(s.parentNode)s.remove()}); seats=[];
+    Array.prototype.slice.call(arena.querySelectorAll('.g5-seat,.g5-ghost,.g5-plus')).forEach(function(n){n.remove()});
+  }
+  function confetti(){
+    var cols=['#e40072','#dda700','#40bfef','#e74e0f','#ffffff'];
+    for(var i=0;i<34;i++){(function(){
+      var s=document.createElement('div');
+      s.style.cssText='position:absolute;top:-12px;width:9px;height:14px;z-index:6;border-radius:2px;pointer-events:none';
+      s.style.left=rnd(4,arena.clientWidth-12)+'px';
+      s.style.background=cols[Math.floor(Math.random()*cols.length)];
+      arena.appendChild(s);
+      var dur=rnd(1100,1900);
+      s.animate([{transform:'translateY(0) rotate(0)',opacity:1},
+                 {transform:'translateY('+(arena.clientHeight+30)+'px) rotate('+rnd(200,620)+'deg)',opacity:.9}],
+                 {duration:dur,easing:'cubic-bezier(.3,.6,.5,1)'});
+      setTimeout(function(){s.remove()},dur);
+    })();}
+  }
+  function finish(win){
+    clearAll();
+    document.getElementById('g5-e-eye').textContent = win?'Ai reușit':'Prea încet';
+    document.getElementById('g5-e-title').innerHTML = win?'Ai prins toate <em>5</em>!':'Locurile s-au <em>ocupat</em>';
+    document.getElementById('g5-e-lead').textContent = win
+      ? 'În joc a fost ușor. Pe bune, cele 5 locuri sunt printre mii de aplicanți — dar dacă ai reflexul ăsta, ai o șansă reală. Aplică acum.'
+      : 'Exact ca în realitate: cele 5 locuri publice zboară. Dar aplicația ta contează mai mult decât viteza degetului — trimite-o.';
+    document.getElementById('g5-e-cta').textContent = win?'Prinde-l pe bune →':'Aplică oricum →';
+    end.classList.remove('g5-hide');
+    if(win) confetti();
+  }
+  document.getElementById('g5-start').addEventListener('click',start);
+  document.getElementById('g5-retry').addEventListener('click',start);
 })();
 </script>
 
